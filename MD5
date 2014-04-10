@@ -1,0 +1,9 @@
+4b1c6e161be8291cbf5d5de447249d01 *DESCRIPTION
+8b54e5a89fbda3af5e077053d40bec76 *NAMESPACE
+7e39456ac7851010bde5159054bb7dc3 *R/estim_herit.R
+73beb29b4e18bb99b09528d066139c2d *data/mat_W.rda
+7fe6495866e47db19994bd97d8d5f6c6 *data/vec_Y.rda
+5560eac6e5da1d8945cfaadc07d18024 *man/HiLMM-package.Rd
+6df1021f879b00d42d4bd6d4cd9cb9f4 *man/estim_herit.Rd
+58015806a5f75bc80f58bc25b48ed2dc *man/mat_W.Rd
+2d942c3c579afc99217e282215703578 *man/vec_Y.Rd
