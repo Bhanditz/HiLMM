@@ -2,16 +2,14 @@
 \alias{estim_herit}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Estimation of the heritability in high dimensional linear mixed models
+Estimation of heritability in linear mixed models
 }
 \description{
-The function estimates the heritability in a linear mixed model in which
-the random effect part is a mixture of a Gaussian and a Dirac distribution.
-It also provides a confidence interval for the heritability. For further
-details on the considered model and on the definition of the heritability, we refer
-the reader to the paper quoted in the references section.}
+The function computes heritability when the random effects follow either a Gaussian distribution or a mixture of a Dirac and a Gaussian distribution.
+ It also provides a confidence interval of heritability when the random effects are Gaussian.
+ }
 \usage{
-estim_herit(Y, W)
+estim_herit(Y,W)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,13 +22,14 @@ matrix with n rows and N columns
 }
 
 \value{
+
 \item{heritability}{Heritability}
-\item{IC_inf}{Lower bound of the confidence interval}
-\item{IC_sup}{Upper bound of the confidence interval}
+\item{CI_low}{Lower bound of the confidence interval}
+\item{CI_up}{Upper bound of the confidence interval}
 \item{standard_deviation }{Standard deviation}
 }
 \references{
-This function implements the method described in the paper "Heritability estimation in high dimensional linear mixed models" by A. Bonnet, E. Gassiat, C. Levy-Leduc, 2014 (submitted and availavable on arXiv:1404.3397).
+The method is developped in the paper "Heritability estimation in high dimensional linear mixed models" (A.Bonnet,E.Gassiat,C.L??vy-Leduc,2014)
 }
 \author{
 Anna Bonnet
@@ -38,16 +37,11 @@ Anna Bonnet
 
 \examples{
 library(HiLMM)
-data(vec_Y)
-data(mat_W)
-Y=data.matrix(vec_Y,rownames.force=NA)
-W=data.matrix(mat_W,rownames.force=NA)
-resultat=estim_herit(Y,W)
-resultat$heritability 
-resultat$IC_inf
-resultat$IC_sup
-resultat$standard_deviation
+data(Y)
+data(W)
+estim_herit(Y,W)$heritability 
+estim_herit(Y,W)$CI_low
+estim_herit(Y,W)$CI_up
+estim_herit(Y,W)$standard_deviation
 }
-\keyword{ heritability }
-\keyword{ linear mixed model }
-
+\keyword{heritability}

@@ -1,0 +1,129 @@
+%\VignetteIndexEntry{HiLMM Vignette}
+%\VignettePackage{HiLMM}
+\documentclass[12pt]{article}
+
+\SweaveOpts{eps=FALSE,echo=TRUE,png=TRUE,pdf=FALSE,figs.only=TRUE}
+\usepackage{times}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=TRUE,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{amsmath}
+
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+\newcommand{\software}[1]{\textsf{#1}}
+\newcommand{\R}{\software{R}}
+\newcommand{\HiLMM}{\textsf{HiLMM}}
+
+
+\textwidth=6.2in
+\textheight=8.5in
+\oddsidemargin=0.2in
+\evensidemargin=0.2in
+\headheight=0in
+\headsep=0in
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\title{\textsf{HiLMM}: Package for heritability estimation}
+\author{A. Bonnet}
+\date{\today}
+\maketitle
+
+
+
+This vignette explains how to use the \textsf{HiLMM} package which is dedicated
+to the estimation of heritability in linear mixed models. For further details on the
+statistical model and on the implementation, we refer the reader to \cite{nous}.
+
+After installing the package in \R, the package has to be loaded
+by using the following instruction:
+
+<<loadparameters>>=  
+library(HiLMM)
+@
+
+
+The package \textsf{HiLMM} contains two functions called \verb|estim_herit| and \verb|data_simu|.
+
+\ \
+
+The \verb|estim_herit| function provides an estimation of the heritability and its usage is described as follows:
+\begin{verbatim}
+res_herit=estim_herit(Y,W)
+\end{verbatim}
+where the arguments are:
+\begin{itemize}
+\item{\verb|Y|: Vector of observations of size $n$}
+\item{\verb|W|: Matrix which contains the genetic information of size $n\times N$}
+\end{itemize}
+and where the output \verb|res_herit| is a list of four attributes:
+\begin{itemize}
+\item{\verb|heritability|: estimated value of the heritability}
+\item{\verb|CI_low|: lower bound of the confidence interval for the heritability} 
+\item{\verb|CI_up|: upper bound of the confidence interval for the heritability}
+\item{\verb|standard deviation|: standard deviation associated to the estimation of the heritability}
+\end{itemize}
+
+ 
+The \verb|data_simu| function generates datasets which can be used as arguments of the function \verb|estim_herit|, which are a vector of observations and a matrix which has the features of a genetic information matrix. This function allows the user to test the function \verb|res_herit| with a dataset of any size with given values of \verb|eta_star| and \verb|q|.These parameters are defined in Equations (4) and (5) of \cite{nous}.
+
+The usage of this function is as follows:
+\begin{verbatim}
+data_sim=data_simu(n,N,eta_star,q)
+\end{verbatim}
+where the arguments are:
+\begin{itemize}
+\item{\verb|n|: number of observations}
+\item{\verb|N|: number of SNPs}
+\item{\verb|eta_star|: value of the heritability}
+\item{\verb|q|: proportion of SNPs which are associated to non null effects}
+\end{itemize}
+and where the output \verb|data_sim| is identical to the arguments of \verb|estim_herit|, that is:
+\begin{itemize}
+\item{\verb|Y|: Vector of observations of size $n$}
+\item{\verb|W|: Matrix which contains the genetic information of size $n \times N$}
+
+\end{itemize}
+
+We can for example generate a dataset with the function \verb|data_simu| and then apply the function \verb|estim_herit|.
+
+<<HiLMM_R>>=
+data_sim= data_simu(500,1000,0.6,0.5)
+res_herit=estim_herit(data_sim$Y,data_sim$W)
+@
+
+
+<<resultHiLMM>>=
+data_sim$W[1:10,1:10]
+data_sim$Y[1:10]
+@
+
+The generated matrix \verb|W| contains 0,1,2 at position $(i,j)$ according to the version of the $j$-th SNP of the $i$-th individual. More precisely, 0,2,1 means respectively that the individual has two copies of the less frequent SNP, two copies of the more frequent SNP and one copy of each. In practice, the $j$-th column of W is generated according to a binomial distribution with parameters $n$ and $p_j$, $p_j$ representing the frequency of the less frequent allele and being uniformly chosen between 0.1 and 0.5.
+ 
+ For this dataset we get the following results.
+ 
+<<resultHiLMM>>=
+res_herit$heritability
+res_herit$CI_low
+res_herit$CI_up
+res_herit$standard_deviation
+@
+
+\verb|estim_herit| provides an estimation for the heritability, the bounds of the $95\%$ confidence interval and the standard deviation.
+\\
+Hereafter, we also provide some information about the R session
+
+<<sessionInfo>>=
+sessionInfo()
+@
+
+\bibliographystyle{plain}      
+\bibliography{bib_vignette}    
+\end{document}
